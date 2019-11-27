@@ -1,0 +1,97 @@
+swagger: "2.0"
+info:
+  version: "0.0.0"
+  title: User Auth API
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /login:
+    post:
+      summary: Returns 2 Cookies ({"Cookie"saltedPassword,"Name" userName})
+      description: Log in via username and password
+      consumes:
+      - "application/json"
+      parameters:
+        - in: body
+          name: loginData
+          schema:
+            type: object
+            required:
+              - userName
+              - password
+            properties:
+              userName:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              password:
+                type: string  
+        "403":
+          description: Forbidden
+  /registration:
+    post:
+      description: Register a New User
+      summary: Returns 2 Cookies ({"Cookie"saltedPassword,"Name" userName})
+      consumes:
+      - "application/json"
+      parameters:
+        - in: body
+          name: registrationData
+          schema:
+            type: object
+            required:
+              - userName
+              - password
+              - email
+            properties:
+              userName:
+                type: string
+              password:
+                type: string
+              email:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              password:
+                type: string  
+  /users:
+    get:
+      summary: Returns a list of users.
+      description: Optional extended description in CommonMark or HTML
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "403":
+          description: Forbidden
+definitions:
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
