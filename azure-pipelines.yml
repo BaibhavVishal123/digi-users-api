@@ -20,28 +20,16 @@ variables:
   # still need to pass pipline secret as following:
   # -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
   - name: TerraformBackend.ResourceGroup
-    value: TF-ResourceGroup
+    value: "TF-ResourceGroup"
   - name: TerraformBackend.StorageAccount
-    value: tfsabob
+    value: "tfsabob"
   - name: TerraformBackend.ContainerName
-    value: tfstate
+    value: "tfstate"
   - name: TerraformBackend.File
-    value: terraform.tfstate
+    value: "terraform.tfstate"
 
 stages:
-  - stage: npm
-    jobs:
-    - job: build_and_install_node 
-      steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '10.x'
-        displayName: 'Install Node.js'
-      - script: |
-          npm install # download 3rd party libraries
-          # npm run build
-        displayName: 'npm install and build'
-  
+
   - stage: terraform
     jobs:
       - job: terraform
@@ -84,3 +72,16 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
             environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
             commandOptions: -input=false 
+  - stage: npm
+    jobs:
+    - job: build_and_install_node 
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
+      - script: |
+          npm install # download 3rd party libraries
+          # npm run build
+        displayName: 'npm install and build'
+  
