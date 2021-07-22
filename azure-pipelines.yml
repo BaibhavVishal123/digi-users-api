@@ -40,8 +40,9 @@ stages:
   - stage: terraform
     jobs:
       - task: TerraformInstaller@0
-          inputs:
-            terraformVersion: '1.0.3'
+        displayName: install terraform
+        inputs:
+          terraformVersion: latest
       - job: terraform_init_validate
         steps:
         - script: |
