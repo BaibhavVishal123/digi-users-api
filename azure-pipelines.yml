@@ -53,8 +53,17 @@ stages:
             cd terraform
             terraform init
             terraform validate
-            terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
+            # Bash Script no simple way of passing service connection, or secret peipline variable
+            # terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
           displayName: "Terraform Init Validate Plan"
+        - task: TerraformTaskV1@0
+          displayName: "Terraform Plan"
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+            environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
+            commandOptions: -input=false         
         - task: TerraformTaskV1@0
           displayName: "Terraform Apply"
           inputs:
@@ -62,4 +71,4 @@ stages:
             command: 'apply'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
             environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
-            commandOptions: -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
+            commandOptions: -input=false 
