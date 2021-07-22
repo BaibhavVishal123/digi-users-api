@@ -9,6 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  someVariable: 'someValue'
+  # stored as pipeline secret, however cant read this
+  someSecretVariable: '$(SomeConnectionString)' 
+  TF_VAR_APP_NAME: 'someapp'
+  # still need to pass pipline secret as following:
+  # -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
+
 stages:
   - stage: npm
     jobs:
@@ -25,12 +33,20 @@ stages:
   
   - stage: terraform
     jobs:
-      - job: terraform_simple_remote_state_file
+      - job: terraform_init_validate
         steps:
         - script: |
             echo "Hello World"
             cd terraform
             terraform init
-            terraform plan
-            terrafrom apply
-          displayName: "Terraform Create Basic Infra"
+            terraform validate
+            terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
+          displayName: "Terraform Init"
+        - task: TerraformTaskV1@0
+          displayName: "Terraform Apply"
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+            environmentServiceNameAzureRM: $(AzureServiceConnection)
+            commandOptions: -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
