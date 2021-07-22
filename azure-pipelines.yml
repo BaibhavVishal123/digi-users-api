@@ -9,12 +9,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-env:
-  ARM_CLIENT_ID: ${{ secrets.TF_VAR_ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_ARM_CLIENT_SECRET }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_ARM_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.TF_VAR_ARM_TENANT_ID }}   
-
 stages:
   - stage: npm
     jobs:
@@ -39,4 +33,4 @@ stages:
             terraform init
             terraform plan
             terrafrom apply
-          displayName: "Terraform Build"
+          displayName: "Terraform Create Basic Infra"
