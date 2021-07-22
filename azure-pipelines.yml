@@ -61,5 +61,5 @@ stages:
             provider: 'azurerm'
             command: 'apply'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
-            environmentServiceNameAzureRM: $(AzureServiceConnection)
+            environmentServiceNameAzureRM: $(azure-bob) # the same name by which azure service conn was created
             commandOptions: -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
