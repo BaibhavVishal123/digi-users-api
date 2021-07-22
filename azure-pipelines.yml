@@ -51,7 +51,6 @@ stages:
         - script: |
             echo "Hello World"
             cd terraform
-            terraform validate
             # Bash Script no simple way of passing service connection, or secret peipline variable
             # terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
           displayName: "Terraform Init Validate Plan"
