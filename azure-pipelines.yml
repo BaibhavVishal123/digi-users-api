@@ -42,14 +42,12 @@ stages:
   
   - stage: terraform
     jobs:
-      - job: terraform_install
+      - job: terraform
         steps:
         - task: TerraformInstaller@0
           displayName: install terraform
           inputs:
             terraformVersion: latest
-      - job: terraform_init_validate_apply
-        steps:
         - script: |
             echo "Hello World"
             cd terraform
