@@ -13,6 +13,7 @@ stages:
   - stage: npm
     jobs:
     - job: nodejs 
+      steps:
       - task: NodeTool@0
         inputs:
           versionSpec: '10.x'
@@ -22,6 +23,6 @@ stages:
           # npm run build
         displayName: 'npm install and build'
   
-  # - stage: terreaform
+  # - stage: terraform
   #   jobs:
   #     - job: 
