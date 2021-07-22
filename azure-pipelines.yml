@@ -63,7 +63,11 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
             environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
-            commandOptions: -input=false         
+            commandOptions: -out=tfplan -input=false   
+            backendAzureRmResourceGroupName: $(TerraformBackend.ResourceGroup)
+            backendAzureRmStorageAccountName: $(TerraformBackend.StorageAccount)
+            backendAzureRmContainerName: $(TerraformBackend.ContainerName)
+            backendAzureRmKey: $(TerraformBackend.File)      
         - task: TerraformTaskV1@0
           displayName: "Terraform Apply"
           inputs:
@@ -71,7 +75,11 @@ stages:
             command: 'apply'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
             environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
-            commandOptions: -input=false 
+            commandOptions: -input=false tfplan
+            backendAzureRmResourceGroupName: $(TerraformBackend.ResourceGroup)
+            backendAzureRmStorageAccountName: $(TerraformBackend.StorageAccount)
+            backendAzureRmContainerName: $(TerraformBackend.ContainerName)
+            backendAzureRmKey: $(TerraformBackend.File)
   - stage: npm
     jobs:
     - job: build_and_install_node 

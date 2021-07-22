@@ -9,7 +9,7 @@ terraform {
   }
 }
 
-# # Uncomment for local TF development
+# # Uncomment for local TF development if state file already in azure
 # terraform {
 #   backend "azurerm" {
 #     resource_group_name  = "TF-ResourceGroup"
