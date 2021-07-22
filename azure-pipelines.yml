@@ -12,7 +12,7 @@ pool:
 stages:
   - stage: npm
     jobs:
-    - job: nodejs 
+    - job: build and install node 
       steps:
       - task: NodeTool@0
         inputs:
@@ -23,6 +23,18 @@ stages:
           # npm run build
         displayName: 'npm install and build'
   
-  # - stage: terraform
-  #   jobs:
-  #     - job: 
+  - stage: terraform
+    jobs:
+      - job: terraform simple remote state file
+        steps:
+        # random task name
+        # - task:
+        #   inputs:
+        #   displayName: 
+        - script: |
+            echo "Hello World"
+            cd terraform
+            terraform init
+            terraform plan
+            terrafrom apply
+          displayName: "Terraform Build"
