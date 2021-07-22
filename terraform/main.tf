@@ -9,14 +9,15 @@ terraform {
   }
 }
 
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "TF-ResourceGroup"
-    storage_account_name = "tfsabob"
-    container_name       = "tfstate"
-    key                  = "terraform.tfstate"
-  }
-}
+# # Uncomment for local TF development
+# terraform {
+#   backend "azurerm" {
+#     resource_group_name  = "TF-ResourceGroup"
+#     storage_account_name = "tfsabob"
+#     container_name       = "tfstate"
+#     key                  = "terraform.tfstate"
+#   }
+# }
 
 variable "client_secret" {
 }
