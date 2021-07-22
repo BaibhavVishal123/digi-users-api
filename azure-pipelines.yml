@@ -25,6 +25,8 @@ variables:
     value: tfsabob
   - name: TerraformBackend.ContainerName
     value: tfstate
+  - name: TerraformBackend.File
+    value: terraform.tfstate
 
 stages:
   - stage: npm
@@ -53,14 +55,19 @@ stages:
             cd terraform
             # Bash Script no simple way of passing service connection, or secret peipline variable
             # terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
-          displayName: "Terraform Init Validate Plan"
+          displayName: "Terraform Bash script"
         - task: TerraformTaskV1@0
           displayName: "Terraform Init"
           inputs:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
-            environmentServiceNameAzureRM: azure-bob # the same name by which azure service conn was created
+            backendServiceArm: azure-bob
+            backendAzureRmResourceGroupName: $(TerraformBackend.ResourceGroup)
+            backendAzureRmStorageAccountName: $(TerraformBackend.StorageAccount)
+            backendAzureRmContainerName: $(TerraformBackend.ContainerName)
+            backendAzureRmKey: $(TerraformBackend.File)
+            
         - task: TerraformTaskV1@0
           displayName: "Terraform Plan"
           inputs:
