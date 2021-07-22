@@ -10,10 +10,13 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - someVariable: 'someValue'
+  - name: someVariable
+    value: 'someValue'
   # stored as pipeline secret, however cant read this
-  - someSecretVariable: '$(SomeConnectionString)' 
-  - TF_VAR_APP_NAME: 'someapp'
+  - name: someSecretVariable
+    value: '$(SomeConnectionString)' 
+  - name: TF_VAR_APP_NAME
+    value: 'someapp'
   # still need to pass pipline secret as following:
   # -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
   - name: TerraformBackend.ResourceGroup
@@ -39,11 +42,13 @@ stages:
   
   - stage: terraform
     jobs:
-      - task: TerraformInstaller@0
-        displayName: install terraform
-        inputs:
-          terraformVersion: latest
-      - job: terraform_init_validate
+      - job: terraform_install
+        steps:
+        - task: TerraformInstaller@0
+          displayName: install terraform
+          inputs:
+            terraformVersion: latest
+      - job: terraform_init_validate_apply
         steps:
         - script: |
             echo "Hello World"
@@ -51,7 +56,7 @@ stages:
             terraform init
             terraform validate
             terraform plan -input=false -var "VM_ADMIN_PASSWORD=$(TF_VAR_admin_password)"
-          displayName: "Terraform Init"
+          displayName: "Terraform Init Validate Plan"
         - task: TerraformTaskV1@0
           displayName: "Terraform Apply"
           inputs:
