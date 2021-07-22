@@ -1,3 +1,6 @@
+*.lock.hcl
+*/.terraform/*
+terraform/terraformPlan
 node_modules/*
 *.log
 package-lock.json
